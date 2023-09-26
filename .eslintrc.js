@@ -17,7 +17,8 @@ module.exports = {
       files: [
         'src/views/index.vue',
         'src/views/**/index.vue',
-        'src/components/**/index.vue'
+        'src/components/**/index.vue',
+        'src/layout/**/index.vue'
       ],
       rules: {
         'vue/multi-word-component-names': 'off'

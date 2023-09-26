@@ -30,6 +30,7 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click="login(ruleFormRef)"
+        :loading="loading"
         >登录</el-button
       >
     </el-form>
@@ -37,8 +38,10 @@
 </template>
 <script setup>
 import { computed, ref } from 'vue'
+import { useStore } from 'vuex'
 import { validatePassword } from './rules'
-
+import router from '@/router'
+const loading = ref(false)
 const ruleFormRef = ref('ruleFormRef')
 const loginForm = ref({
   username: '',
@@ -54,6 +57,7 @@ const loginFormRules = ref({
     validator: validatePassword()
   }
 })
+const store = useStore()
 /**
  * 密码框显示隐藏
  */
@@ -68,9 +72,17 @@ const showPwdHandler = () => {
  * 登录
  */
 const login = (ruleFormRef) => {
-  ruleFormRef.validate((valid) => {
+  ruleFormRef.validate(async (valid) => {
     if (valid) {
       // TODO: 登录
+      try {
+        loading.value = true
+        await store.dispatch('user/login', loginForm.value)
+        router.push('/')
+      } catch (error) {
+      } finally {
+        loading.value = false
+      }
     }
   })
 }
